@@ -1,17 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_messenger/features/main_screen.dart';
-import 'package:flutter_messenger/features/register_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -26,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Вход'),
+        title: Text('Регистрация'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -49,33 +46,18 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () async {
                 try {
                   UserCredential userCredential = await FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
+                      .createUserWithEmailAndPassword(
                           email: emailController.text,
                           password: passwordController.text);
-                  // Пользователь успешно вошел
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),
-                  );
+                  // Пользователь успешно зарегистрирован
+                  Navigator.pop(context);
                 } on FirebaseAuthException catch (e) {
-                  if (e.code == 'user-not-found') {
-                    print('Пользователь не найден');
-                  } else if (e.code == 'wrong-password') {
-                    print('Неверный пароль');
+                  if (e.code == 'email-already-in-use') {
+                    print('Email уже используется');
                   }
                 }
               },
-              child: Text('Войти'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Переход на экран регистрации
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegistrationPage()),
-                );
-              },
-              child: Text('Регистрация'),
+              child: Text('Зарегистрироваться'),
             ),
           ],
         ),
