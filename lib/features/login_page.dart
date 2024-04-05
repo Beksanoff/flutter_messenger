@@ -26,21 +26,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Вход'),
+        title: const Text('Вход'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
             ),
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Пароль',
               ),
               obscureText: true,
@@ -58,24 +58,32 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => MainScreen()),
                   );
                 } on FirebaseAuthException catch (e) {
+                  String message = 'Произошла ошибка';
                   if (e.code == 'user-not-found') {
-                    print('Пользователь не найден');
+                    message = 'Пользователь не найден';
                   } else if (e.code == 'wrong-password') {
-                    print('Неверный пароль');
+                    message = 'Неверный пароль';
                   }
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                    ),
+                  );
                 }
               },
-              child: Text('Войти'),
+              child: const Text('Войти'),
             ),
             ElevatedButton(
               onPressed: () {
                 // Переход на экран регистрации
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegistrationPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const RegistrationPage()),
                 );
               },
-              child: Text('Регистрация'),
+              child: const Text('Регистрация'),
             ),
           ],
         ),

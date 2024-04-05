@@ -23,21 +23,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Регистрация'),
+        title: const Text('Регистрация'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
             ),
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Пароль',
               ),
               obscureText: true,
@@ -52,12 +52,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   // Пользователь успешно зарегистрирован
                   Navigator.pop(context);
                 } on FirebaseAuthException catch (e) {
+                  String message = '';
                   if (e.code == 'email-already-in-use') {
-                    print('Email уже используется');
+                    message = 'Пользователь с таким email уже существует';
                   }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                    ),
+                  );
                 }
               },
-              child: Text('Зарегистрироваться'),
+              child: const Text('Зарегистрироваться'),
             ),
           ],
         ),
